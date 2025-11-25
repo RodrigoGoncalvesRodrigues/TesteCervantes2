@@ -139,12 +139,16 @@ Isso garante transparência e rastreabilidade.
 ## 🌐 Fluxo de Execução do App
 
 1️⃣ Usuário insere, lista, atualiza ou deleta um registro
+
 2️⃣ A operação é enviada para o SQLite via Localdb
+
 3️⃣ As triggers registram tudo automaticamente
+
 4️⃣ A interface recarrega os dados com setState()
+
 5️⃣ Mensagens visuais (SnackBar) confirmam cada ação
 
-🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias Utilizadas
 
 - Flutter (Desktop) → Interface gráfica
 
