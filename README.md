@@ -1,85 +1,161 @@
-⚙️Projeto TesteCervantes 2
-Este projeto foi desenvolvido como parte do Teste de Desenvolvimento , atendendo aos requisitos de criação de uma aplicação desktop em Windows Forms integrada ao PostgreSQL, com cadastro, validações no banco e registro de operações em log.
+# ⚙️ Projeto TesteCervantes – Aplicação Flutter Desktop com SQLite
 
-🧩 Estrutura do Projeto
-📁 Banco de Dados
-Container com PostgreSQL 15, rodando na porta 5432, configurado com banco inicial meu_banco, usuário postgres e senha definida no momento da criação.
-📁 Gerenciador Web (pgAdmin)
-Container com pgAdmin4, acessível via navegador em http://localhost:8080, permitindo administração visual do banco de dados.
-📁 Rede Docker
-Ambos os containers estão conectados em uma rede Docker dedicada chamada postgres-network, garantindo comunicação segura entre eles.
-📁 Interface Gráfica (Windows Forms)
-Tela de cadastro desenvolvida em Windows Forms.
-Contém campos para Nome (texto) e Telefone/Número (numérico).
-Inclui botões com as seguintes funcionalidades:
-Salvar → Insere um novo registro.
-Atualizar → Atualiza um cadastro existente.
-Deletar → Remove um registro.
-Listar → Exibe todos os registros cadastrados.
-📁 Código Fonte (C#)
-Implementação da lógica de conexão com o PostgreSQL.
-Configuração dos eventos dos botões para operações de Insert, Update, Delete e Select.
-Integração com validações do banco de dados (campos obrigatórios, valores numéricos maiores que zero, unicidade do campo).
-📁 Script SQL
-Arquivo script.sql com a criação das tabelas:
-cadastros (tabela principal com os campos Nome e Numero).
-log_operacoes (tabela de auditoria de operações realizadas).
-Função e trigger para registrar automaticamente cada operação no log.
-🗄️ Estrutura do Banco de Dados
-📝 Cadastros A tabela cadastros armazena os registros principais. Campos:
+Este projeto foi desenvolvido como parte do Teste de Desenvolvimento, atendendo aos requisitos de criação de uma aplicação desktop em Flutter (Windows) integrada ao SQLite, com:
 
-Id: Identificador único do cadastro (SERIAL / PK)
+- Cadastro de usuários
 
-Nome: Nome do cadastro (VARCHAR 100, NOT NULL)
+- Validações diretamente no banco
 
-Numero: Número associado ao cadastro (NUMERIC 15, NOT NULL, UNIQUE)
+- Registro automático de operações em log
 
-📜 LogOperacoes A tabela log_operacoes armazena todas as alterações realizadas na tabela cadastros. Campos:
+- CRUD completo (Inserir, Listar, Atualizar, Deletar)
 
-Id: Identificador único da operação (SERIAL / PK)
+- Interface moderna construída com Flutter
 
-DataHora: Data e hora da operação (TIMESTAMP, default = CURRENT_TIMESTAMP)
+## 🧩 Estrutura do Projeto
+## 📁 Banco de Dados (SQLite)
 
-TipoOperacao: Tipo da operação realizada (INSERT, UPDATE, DELETE)
+Arquivo Local.db, criado automaticamente pela aplicação ao iniciar.
 
-IdCadastro: ID do registro da tabela cadastros afetado (INTEGER, FK implícita)
+Contém:
 
-NomeAnterior: Nome antes da alteração (VARCHAR 100, só em UPDATE/DELETE)
+- Tabela cadastro (tabela principal)
 
-NumeroAnterior: Número antes da alteração (NUMERIC 15, só em UPDATE/DELETE)
+- Tabela log_operacoes (tabela de auditoria)
 
-NomeNovo: Nome após a alteração (VARCHAR 100, só em INSERT/UPDATE)
+- Triggers automáticas para:
 
-NumeroNovo: Número após a alteração (NUMERIC 15, só em INSERT/UPDATE)
+  - INSERT
 
-⚙️ Trigger & Function
+  - UPDATE
 
-A função log_operacoes_function() é chamada automaticamente toda vez que ocorre um INSERT, UPDATE ou DELETE na tabela cadastros.
+  - DELETE
 
-O trigger trg_log_operacoes aplica a função para cada linha modificada.
+As validações são feitas diretamente no banco usando CHECK Constraints, garantindo integridade e segurança.
 
-Dessa forma, o histórico de operações fica salvo na tabela log_operacoes.
+## 📁 Interface Gráfica (Flutter Desktop)
 
-🌐 Fluxo de Configuração
-🔹 Passos manuais (via Docker CLI) Etapa Descrição
+A aplicação possui as seguintes telas:
 
-Etapa	Descrição
-Criar Rede	docker network create postgres-network
-Subir PostgresSQL	docker run --name meu-postgres --network postgres-network -e POSTGRES_DB=meu_banco -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=sua_senha -p 5432:5432 -d postgres:15
-Subir pgAdmin	docker run --name meu-pgadmin --network postgres-network -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin -p 8080:80 -d dpage/pgadmin4
-Acessar pgAdmin	http://localhost:8080 (login com admin@admin.com / admin)
-Conectar ao banco	Host: meu-postgres · Porta: 5432 · User: postgres · Senha: sua_senha
-🚀 Tecnologias do Projeto
-PostgreSQL 15 (banco de dados relacional)
+### 🟦 Home Page
 
-pgAdmin4 (interface de administração web)
+Tela principal contendo:
 
-Docker (containers e rede virtual)
+- Campo Nome
 
-Docker Network (para comunicação segura entre containers)
+- Campo Número
 
-Windows Forms (C#) → Desenvolvimento da interface gráfica da aplicação desktop.
+- Botões:
 
-Triggers e Funções no PostgreSQL → Responsáveis por registrar automaticamente logs das operações (INSERT, UPDATE, DELETE) na tabela log_operacoes.
+  - Inserir
 
-.NET Framework / C# → Implementação da lógica de negócio, validações e manipulação do banco de dados pela aplicação.
+  - Listar
+
+  - Atualizar
+
+  - Deletar
+
+### 🟩 ListarPage
+
+- Exibe todos os registros da tabela cadastro
+
+- Permite editar ou excluir diretamente na lista
+
+### 🟧 UpdatePage
+
+- Mostra formulário de edição em um AlertDialog
+
+- Atualiza dados e recarrega lista
+
+### 🟥 DeletePage
+
+- Lista registros e permite deletar com um clique
+
+📁 Código Fonte (Dart / Flutter)
+
+Implementação completa do CRUD utilizando:
+
+- sqflite_common_ffi (SQLite para desktop)
+
+- Validação via CHECK no banco
+
+- Triggers para auditoria
+
+- Widgets:
+
+  - Scaffold
+
+  - ListView
+
+  - AlertDialog
+
+  - TextField
+
+  - SnackBar
+
+Toda operação no banco (insert, update, delete) gera uma entrada na tabela log_operacoes automaticamente.
+
+
+## 🗄️ Estrutura Detalhada do Banco de Dados
+## 📝 Tabela cadastro
+
+Armazena os registros principais.
+
+|Campo |	Tipo	|Descrição|
+|------|--------|---------|
+|Id	|INTEGER PK	|Identificador único|
+|Nome	|TEXT	|Apenas letras, sem números, limitado a 30 caract.|
+|Numero	|INTEGER	|Número de telefone (11 dígitos), único|
+
+## 📜 Tabela log_operacoes
+
+Armazena o histórico completo de alterações.
+
+|Campo|	Tipo	|Descrição|
+|-----|-------|---------|
+|Id	|PK	|ID da operação|
+|DataHora	|TEXT	|Data e hora automática|
+|TipoOperacao	|TEXT	|INSERT / UPDATE / DELETE|
+|IdCadastro	|INTEGER	|Registro afetado|
+|NomeAnterior	|TEXT	|Antes (UPDATE/DELETE)|
+|NumeroAnterior	|INTEGER	|Antes (UPDATE/DELETE)|
+|NomeNovo	|TEXT	|Depois (INSERT/UPDATE)|
+|NumeroNovo	|INTEGER	|Depois (INSERT/UPDATE)|
+
+## ⚙️ Trigger & Auditoria Automática
+
+Os triggers garantem que toda alteração realizada na tabela cadastro seja registrada automaticamente na tabela log_operacoes:
+
+- Quem alterou? (IdCadastro)
+
+- O que mudou? (valores antigos e novos)
+
+- Quando mudou? (DataHora)
+
+- O que foi feito? (TipoOperacao)
+
+Isso garante transparência e rastreabilidade.
+
+## 🌐 Fluxo de Execução do App
+
+1️⃣ Usuário insere, lista, atualiza ou deleta um registro
+2️⃣ A operação é enviada para o SQLite via Localdb
+3️⃣ As triggers registram tudo automaticamente
+4️⃣ A interface recarrega os dados com setState()
+5️⃣ Mensagens visuais (SnackBar) confirmam cada ação
+
+🚀 Tecnologias Utilizadas
+
+- Flutter (Desktop) → Interface gráfica
+
+- Dart → Lógica da aplicação
+
+- sqflite_common_ffi → Banco SQLite integrado ao desktop
+
+- SQLite → Banco de dados local
+
+- Triggers SQL → Auditoria automática
+
+- Constraint CHECK → Validações diretamente no banco
+
+- Material Design → Layout moderno e responsivo
