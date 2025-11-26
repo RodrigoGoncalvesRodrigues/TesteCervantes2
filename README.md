@@ -14,87 +14,32 @@ Este projeto foi desenvolvido como parte do Teste de Desenvolvimento, atendendo 
 
 ## 🧩 Estrutura do Projeto
 ## 📁 Banco de Dados (SQLite)
+O banco de dados Local.db é criado automaticamente pela aplicação ao iniciar, utilizando a biblioteca sqflite_common_ffi.
 
-Arquivo Local.db, criado automaticamente pela aplicação ao iniciar.
+📍 Caminho do Banco de Dados
 
-Contém:
+O arquivo fica armazenado automaticamente em:
+`projeto_cervantes2\.dart_tool\sqflite_common_ffi\databases\Local.db`
 
-- Tabela cadastro (tabela principal)
+Esse caminho é gerado pela própria engine sqflite para ambientes desktop.
 
-- Tabela log_operacoes (tabela de auditoria)
+## 🛠️ Edição e Visualização do Banco
 
-- Triggers automáticas para:
+Para inspecionar, visualizar e editar o banco de dados fora do app, utilizamos:
 
-  - INSERT
+✔️ DB Browser for SQLite
 
-  - UPDATE
+Ferramenta recomendada para:
 
-  - DELETE
+- Abrir o Local.db
 
-As validações são feitas diretamente no banco usando CHECK Constraints, garantindo integridade e segurança.
+- Ler tabelas
 
-## 📁 Interface Gráfica (Flutter Desktop)
+- Ver triggers
 
-A aplicação possui as seguintes telas:
+- Executar queries
 
-### 🟦 Home Page
-
-Tela principal contendo:
-
-- Campo Nome
-
-- Campo Número
-
-- Botões:
-
-  - Inserir
-
-  - Listar
-
-  - Atualizar
-
-  - Deletar
-
-### 🟩 ListarPage
-
-- Exibe todos os registros da tabela cadastro
-
-- Permite editar ou excluir diretamente na lista
-
-### 🟧 UpdatePage
-
-- Mostra formulário de edição em um AlertDialog
-
-- Atualiza dados e recarrega lista
-
-### 🟥 DeletePage
-
-- Lista registros e permite deletar com um clique
-
-📁 Código Fonte (Dart / Flutter)
-
-Implementação completa do CRUD utilizando:
-
-- sqflite_common_ffi (SQLite para desktop)
-
-- Validação via CHECK no banco
-
-- Triggers para auditoria
-
-- Widgets:
-
-  - Scaffold
-
-  - ListView
-
-  - AlertDialog
-
-  - TextField
-
-  - SnackBar
-
-Toda operação no banco (insert, update, delete) gera uma entrada na tabela log_operacoes automaticamente.
-
+- Fazer debugging do banco
 
 ## 🗄️ Estrutura Detalhada do Banco de Dados
 ## 📝 Tabela cadastro
@@ -122,19 +67,76 @@ Armazena o histórico completo de alterações.
 |NomeNovo	|TEXT	|Depois (INSERT/UPDATE)|
 |NumeroNovo	|INTEGER	|Depois (INSERT/UPDATE)|
 
+
+
 ## ⚙️ Trigger & Auditoria Automática
 
-Os triggers garantem que toda alteração realizada na tabela cadastro seja registrada automaticamente na tabela log_operacoes:
+Os triggers garantem que toda operação realizada na tabela `cadastro` seja registrada automaticamente na tabela `log_operacoes`, incluindo:
 
-- Quem alterou? (IdCadastro)
+- Qual operação ocorreu
 
-- O que mudou? (valores antigos e novos)
+- Dados antigos
 
-- Quando mudou? (DataHora)
+- Dados novos
 
-- O que foi feito? (TipoOperacao)
+- Data e hora da operação
 
-Isso garante transparência e rastreabilidade.
+- ID do registro afetado
+
+Isso traz transparência, segurança e rastreabilidade total.
+
+## 📁 Interface Gráfica (Flutter Desktop)
+
+A aplicação possui as seguintes telas:
+
+### 🟦 Home Page
+
+Tela principal contendo:
+
+- Campo Nome
+
+- Campo Número
+
+- Botões:Inserir, Listar, Atualizar, Deletar
+
+### 🟩 ListarPage
+
+- Exibe todos os registros da tabela cadastro
+
+- Permite editar ou excluir diretamente na lista
+
+### 🟧 UpdatePage
+
+- Mostra formulário de edição em um AlertDialog
+
+- Atualiza dados e recarrega lista
+
+### 🟥 DeletePage
+
+- Lista registros e permite deletar com um clique
+## 📁 Código Fonte (Dart / Flutter)
+
+Implementação completa do CRUD utilizando:
+
+- sqflite_common_ffi (SQLite para desktop)
+
+- Validação via CHECK no banco
+
+- Triggers para auditoria automática
+
+- Widgets:
+
+  - Scaffold
+
+  - ListView
+
+  - AlertDialog
+
+  - TextField
+
+  - SnackBar
+
+Toda operação no banco (insert, update, delete) gera uma entrada na tabela log_operacoes automaticamente.
 
 ## 🌐 Fluxo de Execução do App
 
@@ -155,6 +157,8 @@ Isso garante transparência e rastreabilidade.
 - Dart → Lógica da aplicação
 
 - sqflite_common_ffi → Banco SQLite integrado ao desktop
+  
+- DB Browser for SQLite
 
 - SQLite → Banco de dados local
 
